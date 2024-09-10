@@ -1,8 +1,8 @@
 import PointListView from '../view/point-list-view.js';
-import EditPoint from '../view/edit-view.js';
-import AddPoint from '../view/add-view.js';
+import EditPoint from '../view/edit-point-view.js';
+import AddPoint from '../view/add-point-view.js';
 import PointView from '../view/point-view.js';
-import SortingView from '../view/sort-view.js';
+import SortView from '../view/sort-view.js';
 import { render } from '../render.js';
 
 export default class MainPresenter {
@@ -13,7 +13,7 @@ export default class MainPresenter {
   }
 
   init() {
-    render(new SortingView(), this.pointsContainer);
+    render(new SortView(), this.pointsContainer);
     render(this.pointsListComponent, this.pointsContainer);
     render(new EditPoint(), this.pointsListComponent.getElement());
     render(new AddPoint(), this.pointsListComponent.getElement());

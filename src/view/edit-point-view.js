@@ -87,7 +87,7 @@ const getPointOfferItem = (eventOffer) => `<div class="event__offer-${eventOffer
   </label>
   </div>`;
 
-function createEditPointViewTemplate() {
+function createEditPointTemplate() {
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -153,7 +153,7 @@ function createEditPointViewTemplate() {
 
 export default class EditPointView {
   getTemplate() {
-    return createEditPointViewTemplate();
+    return createEditPointTemplate();
   }
 
   getElement() {
