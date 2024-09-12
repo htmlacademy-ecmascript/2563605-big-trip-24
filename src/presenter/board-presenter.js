@@ -2,7 +2,7 @@ import PointListView from '../view/point-list-view';
 import EditPointView from '../view/edit-point-view';
 import AddPointView from '../view/add-point-view';
 import PointView from '../view/point-view';
-import SortView  from '../view/sort-view';
+import SortView from '../view/sort-view';
 import { render } from '../render';
 
 export default class BoardPresenter {
