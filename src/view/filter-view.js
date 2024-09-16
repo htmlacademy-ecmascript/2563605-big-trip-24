@@ -1,6 +1,6 @@
-import { createElement } from '../render.js';
+import { createElement } from '../render';
+import { capitalize } from '../utils';
 
-const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 const FILTERS = [
   {
     name: 'everything',
