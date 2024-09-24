@@ -1,6 +1,8 @@
 import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../utils';
-import { TYPES, CITIES, DESCRIPTION_TEXT, DATES } from '../const';
+//import { TYPES, CITIES, DESCRIPTION_TEXT, DATES } from '../const';
 import { getOffers } from './offers-mock';
+import { CITIES, DESCRIPTION_TEXT, DATES } from './const-mock';
+import { TYPES } from '../const';
 
 const POINTS_COUNT = 10;
 const offersData = getOffers();
@@ -34,7 +36,7 @@ const createPointMock = () => {
   const pointMock = {
     id: generateRandomPointId(),
     type: pointType,
-    destination: getRandomInteger(1, CITIES.length),
+    destinations: getRandomInteger(1, CITIES.length),
     description: getRandomDescriptionPoint(DESCRIPTION_TEXT),
     dateFrom: pointDate.dateFrom,
     dateTo: pointDate.dateTo,

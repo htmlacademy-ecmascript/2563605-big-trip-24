@@ -1,6 +1,7 @@
-import { createElement } from '../render';
+//import { createElement } from '../render';
 import { humanizePointDate, getPointDuration } from '../utils';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
+import AbstractView from '../framework/view/abstract-view';
 
 const getOffersData = (offerType, offersList) => {
   const offerData = offersList.find((offer) => offer.type === offerType).offers;
@@ -15,8 +16,8 @@ const getOffersData = (offerType, offersList) => {
   return result;
 };
 
-function createPointTemplate(point, offers, destinations) {
-  const { type, destination, dateFrom, dateTo, basePrice } = point;
+function createPointTemplate(points, offers, destinations) {
+  const { type, destination, dateFrom, dateTo, basePrice } = points;
 
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
 
@@ -55,26 +56,43 @@ function createPointTemplate(point, offers, destinations) {
 </li>`;
 }
 
-export default class PointView {
-  constructor({ point, offers, destinations }) {
-    this.point = point;
-    this.offers = offers;
-    this.destinations = destinations;
+export default class PointView extends AbstractView{
+  #point = null;
+  #offers = null;
+  #destinations = null;
+  #handleEditClick = null;
+
+  constructor({ point, offers, destinations, onEditClick }) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
-  getTemplate() {
-    return createPointTemplate(this.point, this.offers, this.destinations);
+  get template() {
+    return createPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
+  // getTemplate() {
+  //   return createPointTemplate(this.points, this.offers, this.destinations);
+  // }
 
-    return this.element;
-  }
+  // getElement() {
+  //   if (!this.element) {
+  //     this.element = createElement(this.getTemplate());
+  //   }
 
-  removeElement() {
-    this.element = null;
-  }
+  //   return this.element;
+  // }
+
+  // removeElement() {
+  //   this.element = null;
+  // }
 }
