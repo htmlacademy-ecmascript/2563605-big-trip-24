@@ -1,4 +1,3 @@
-//import { createElement } from '../render';
 import { humanizePointDate, getPointDuration } from '../utils';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
@@ -80,19 +79,4 @@ export default class PointView extends AbstractView{
     evt.preventDefault();
     this.#handleEditClick();
   };
-  // getTemplate() {
-  //   return createPointTemplate(this.points, this.offers, this.destinations);
-  // }
-
-  // getElement() {
-  //   if (!this.element) {
-  //     this.element = createElement(this.getTemplate());
-  //   }
-
-  //   return this.element;
-  // }
-
-  // removeElement() {
-  //   this.element = null;
-  // }
 }

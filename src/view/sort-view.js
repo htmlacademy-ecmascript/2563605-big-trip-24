@@ -1,4 +1,3 @@
-//import { createElement } from '../render';
 import { capitalize } from '../utils';
 import AbstractView from '../framework/view/abstract-view';
 
@@ -41,15 +40,4 @@ export default class SortView extends AbstractView{
     return createSortingTemplate();
   }
 
-  // getElement() {
-  //   if (!this.element) {
-  //     this.element = createElement(this.getTemplate());
-  //   }
-
-  //   return this.element;
-  // }
-
-  // removeElement() {
-  //   this.element = null;
-  // }
 }

@@ -1,4 +1,3 @@
-//import { createElement } from '../render';
 import { capitalize } from '../utils';
 import { TYPES } from '../const';
 import { CITIES } from '../mock/const-mock';

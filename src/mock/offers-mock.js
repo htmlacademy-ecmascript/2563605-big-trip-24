@@ -1,4 +1,3 @@
-//import { OFFERS, TYPES } from '../const';
 import { getRandomInteger, getRandomIntegerArray } from '../utils';
 import { OFFERS } from './const-mock';
 import { TYPES } from '../const';

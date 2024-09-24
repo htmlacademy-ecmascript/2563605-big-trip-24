@@ -1,7 +1,6 @@
 import { RenderPosition, render } from './framework/render.js';
 import FilterView from './view/filter-view.js';
 import TripInfoView from './view/trip-info-view.js';
-//import { RenderPosition, render } from './render.js';
 import BoardPresenter from './presenter/board-presenter.js';
 import PointModel from './model/point-model.js';
 

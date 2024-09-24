@@ -1,4 +1,3 @@
-//import { createElement } from '../render.js';
 import { capitalize, humanizePointDate } from '../utils.js';
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const.js';
 import { CITIES } from '../mock/const-mock.js';
@@ -143,19 +142,4 @@ export default class EditPointView extends AbstractView {
     evt.preventDefault();
     this.#handleFormSave();
   };
-  // getTemplate() {
-  //   return createEditPointTemplate(this.points, this.offers, this.destinations);
-  // }
-
-  // getElement() {
-  //   if (!this.element) {
-  //     this.element = createElement(this.getTemplate());
-  //   }
-
-  //   return this.element;
-  // }
-
-  // removeElement() {
-  //   this.element = null;
-  // }
 }
