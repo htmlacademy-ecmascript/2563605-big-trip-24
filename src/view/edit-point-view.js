@@ -1,4 +1,4 @@
-import { capitalize, humanizePointDate } from '../utils.js';
+import { capitalize, humanizePointDate } from './utils/utils.js';
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const.js';
 import { CITIES } from '../mock/const-mock.js';
 import AbstractView from '../framework/view/abstract-view.js';

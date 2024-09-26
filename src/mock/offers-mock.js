@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomIntegerArray } from '../utils';
+import { getRandomInteger, getRandomIntegerArray } from '../view/utils/utils';
 import { OFFERS } from './const-mock';
 import { TYPES } from '../const';
 
