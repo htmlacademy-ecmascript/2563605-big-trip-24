@@ -1,4 +1,4 @@
-import { humanizePointDate, getPointDuration } from '../utils';
+import { humanizePointDate, getPointDuration } from './utils/utils';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
 

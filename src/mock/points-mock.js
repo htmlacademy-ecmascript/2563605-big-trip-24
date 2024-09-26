@@ -1,4 +1,4 @@
-import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../utils';
+import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../view/utils/utils';
 import { getOffers } from './offers-mock';
 import { CITIES, DESCRIPTION_TEXT, DATES } from './const-mock';
 import { TYPES } from '../const';
