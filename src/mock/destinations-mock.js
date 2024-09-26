@@ -1,4 +1,4 @@
-import { CITIES, PICTURES } from '../const';
+import { CITIES, PICTURES } from './const-mock';
 
 let destinationId = 0;
 

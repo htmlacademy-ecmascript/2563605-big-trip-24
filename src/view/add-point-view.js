@@ -1,6 +1,7 @@
-import { createElement } from '../render';
 import { capitalize } from '../utils';
-import { TYPES, CITIES } from '../const';
+import { TYPES } from '../const';
+import { CITIES } from '../mock/const-mock';
+import AbstractView from '../framework/view/abstract-view';
 
 const DEFAULT_TYPE = 'Flight';
 const DEFAULT_DESTINATION = 'Geneva';
@@ -13,8 +14,8 @@ const createPointTypeItem = (pointType, pointTypeChecked) => `
   <label class="event__type-label  event__type-label--${pointType}" for="event-type-${pointType}-1">${capitalize(pointType)}</label>
   </div>`;
 
-const createDestinationsList = (destination) =>
-  `<option value="${destination}"></option>`;
+const createDestinationsList = (destinations) =>
+  `<option value="${destinations}"></option>`;
 
 function createAddPointTemplate() {
 
@@ -143,20 +144,20 @@ function createAddPointTemplate() {
   </form>
 </li>`;
 }
-export default class AddPointView {
-  getTemplate() {
+export default class AddPointView extends AbstractView {
+  get template() {
     return createAddPointTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  // getElement() {
+  //   if (!this.element) {
+  //     this.element = createElement(this.getTemplate());
+  //   }
 
-    return this.element;
-  }
+  //   return this.element;
+  // }
 
-  removeElement() {
-    this.element = null;
-  }
+  // removeElement() {
+  //   this.element = null;
+  // }
 }
