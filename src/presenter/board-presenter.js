@@ -1,7 +1,7 @@
 import PointListView from '../view/point-list-view';
 import SortView from '../view/sort-view';
 import NoPointsView from '../view/no-points-view';
-import {RenderPosition, render } from '../framework/render';
+import { RenderPosition, render } from '../framework/render';
 import { updatePoint } from '../view/utils/utils';
 import PointPresenter from './point-presenter';
 import { SortType } from '../const';
@@ -89,6 +89,7 @@ export default class BoardPresenter {
       onPointsChange: this.#handlePointsChange,
       onModeChange: this.#handleModeChange,
       onPointClear: this.#clearPoint,
+      onEditPointView: this.#resetPointView
     });
 
     pointPresenter.init(point, this.#offers, this.#destinations);
@@ -114,6 +115,10 @@ export default class BoardPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
   }
+
+  #resetPointView = (point) => {
+    this.#pointPresenters.get(point.id).resetView();
+  };
 
   #renderNoPoints() {
     render(this.#noPoints, this.#pointsListComponent.element);
