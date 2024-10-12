@@ -1,7 +1,7 @@
 import PointListView from '../view/point-list-view';
 import SortView from '../view/sort-view';
 import NoPointsView from '../view/no-points-view';
-import { render } from '../framework/render';
+import {RenderPosition, render } from '../framework/render';
 import { updatePoint } from '../view/utils/utils';
 import PointPresenter from './point-presenter';
 import { SortType } from '../const';
@@ -36,7 +36,6 @@ export default class BoardPresenter {
   }
 
   #renderMain() {
-    this.#renderSort(this.#currentSortType);
     render(this.#pointsListComponent, this.#pointsContainer);
 
     if (this.#points.length === 0) {
@@ -52,7 +51,7 @@ export default class BoardPresenter {
       sortType: sortType
     });
 
-    render(this.#sort, this.#pointsContainer);
+    render(this.#sort, this.#pointsContainer, RenderPosition.AFTERBEGIN);
   }
 
   #sortPoints = (sortType) => {
@@ -88,7 +87,8 @@ export default class BoardPresenter {
     const pointPresenter = new PointPresenter({
       pointsListComponent: this.#pointsListComponent.element,
       onPointsChange: this.#handlePointsChange,
-      onModeChange: this.#handleModeChange
+      onModeChange: this.#handleModeChange,
+      onPointClear: this.#clearPoint,
     });
 
     pointPresenter.init(point, this.#offers, this.#destinations);
@@ -118,4 +118,9 @@ export default class BoardPresenter {
   #renderNoPoints() {
     render(this.#noPoints, this.#pointsListComponent.element);
   }
+
+  #clearPoint = (point) => {
+    const targetPresenter = this.#pointPresenters.get(point.id);
+    targetPresenter.destroy();
+  };
 }

@@ -40,4 +40,10 @@ function updatePoint(points, update) {
   return points.map((point) => point.id === update.id ? update : point);
 }
 
-export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, getRandomIntegerArray, updatePoint };
+const getRandomDescriptionPoint = (text) => {
+  const descriptionsArray = text.split('.');
+  const randomDescriptionText = Array.from({ length: 5 }, () => getRandomArrayElement(descriptionsArray).trim()).join('.');
+  return randomDescriptionText;
+};
+
+export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, getRandomIntegerArray, updatePoint, getRandomDescriptionPoint };
