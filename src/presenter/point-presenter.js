@@ -85,15 +85,20 @@ export default class PointPresenter {
     this.#mode = Mode.DEFAULT;
   }
 
-  #handleFavoriteClick = () => {
-    this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
-  };
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#editPointComponent);
+  }
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
       this.#replaceFormToPoint();
     }
   }
+
+  #handleFavoriteClick = () => {
+    this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+  };
 
   #handleFormSaveClick = (point) => {
     this.#handlePointsChange(point);
