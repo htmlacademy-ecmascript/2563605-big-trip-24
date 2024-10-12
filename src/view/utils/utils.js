@@ -1,9 +1,5 @@
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-
-dayjs.extend(duration);
-
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
@@ -40,25 +36,8 @@ const createIdGenerator = () => {
   };
 };
 
-const humanizePointDate = (pointDate, dateFormat) => pointDate ? dayjs(pointDate).format(dateFormat) : '';
+function updatePoint(points, update) {
+  return points.map((point) => point.id === update.id ? update : point);
+}
 
-const getPointDuration = (pointDateFrom, pointDateTo) => {
-  const humatizedDateFrom = dayjs(pointDateFrom);
-  const humatizedDateTo = dayjs(pointDateTo);
-
-  const pointDuration = dayjs.duration(humatizedDateTo.diff(humatizedDateFrom));
-
-  let result = '';
-
-  if (pointDuration.days() > 0) {
-    result = pointDuration.format('DD[D] HH[H] mm[M]');
-  } else if (pointDuration.hours() > 0) {
-    result = pointDuration.format('HH[H] mm[M]');
-  } else {
-    result = pointDuration.format('mm[M]');
-  }
-
-  return result;
-};
-
-export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, humanizePointDate, getPointDuration, getRandomIntegerArray };
+export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, getRandomIntegerArray, updatePoint };
