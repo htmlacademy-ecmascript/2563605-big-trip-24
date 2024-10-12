@@ -1,8 +1,7 @@
 import { capitalize } from './utils/utils';
 import AbstractView from '../framework/view/abstract-view';
 
-function getFiltersItem(type, count) {
-  return `<div class="trip-filters__filter">
+const getFiltersItem = (type, count) => `<div class="trip-filters__filter">
     <input
     id="filter-${type}"
     class="trip-filters__filter-input  visually-hidden"
@@ -11,9 +10,8 @@ function getFiltersItem(type, count) {
     value="${type}"
     ${type === 'everything' ? 'checked' : ''}
     ${count === 0 ? 'disabled' : 'checked'} >
-    <label class="trip-filters__filter-label" for="filter-${type}">${capitalize(type)}</label>
+    <label class="trip-filters__filter-label" for="filter-${type}">${capitalize(type)} ${count}</label>
     </div>`;
-}
 
 function createFiltersTemplate(filters) {
   return `<form class="trip-filters" action="#" method="get">
