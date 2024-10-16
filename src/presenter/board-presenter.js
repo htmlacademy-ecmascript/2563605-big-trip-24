@@ -7,15 +7,18 @@ import { SortType, UpdateType, UserAction, FilterType } from '../const';
 import { getWeightForPrice, getWeightForTime } from '../view/utils/point-utils';
 import { filter } from '../view/utils/filter';
 import NewPointPresenter from './new-point-presenter';
+import LoadingView from '../view/loading-view';
 
 export default class BoardPresenter {
   #pointsListComponent = new PointListView();
+  #loadingComponent = new LoadingView();
   #pointsContainer = null;
   #pointModel = null;
   #noPoints = null;
   #filtersModel = null;
   #newPointPresenter = null;
   #pointPresenters = new Map();
+  #isLoading = true;
 
   #sort = null;
   #currentSortType = SortType.DAY;
@@ -68,7 +71,6 @@ export default class BoardPresenter {
     this.#newPointPresenter.init(this.offers, this.destinations);
   }
 
-
   init() {
     this.#renderSort(this.#currentSortType);
     this.#renderMain();
@@ -76,7 +78,10 @@ export default class BoardPresenter {
 
   #renderMain() {
     render(this.#pointsListComponent, this.#pointsContainer);
-
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     this.#renderPointsList();
   }
 
@@ -89,6 +94,9 @@ export default class BoardPresenter {
     render(this.#sort, this.#pointsContainer, RenderPosition.AFTERBEGIN);
   }
 
+  #renderLoading() {
+    render(this.#loadingComponent,this.#pointsContainer);
+  }
 
   #handleSortClick = (sortType) => {
     if (this.#currentSortType === sortType) {
@@ -146,6 +154,11 @@ export default class BoardPresenter {
         this.#clearPointsList({ resetFilters: true, resetSorting: true });
         this.#renderPointsList();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderMain();
+        break;
     }
   };
 
@@ -169,9 +182,18 @@ export default class BoardPresenter {
     }
   }
 
+  #renderNoPoints() {
+    this.#noPoints = new NoPointsView({
+      filter: this.#currentFilterType,
+    });
+
+    render(this.#noPoints, this.#pointsListComponent.element);
+  }
+
   #clearPointsList({ resetFilters = false, resetSorting = false } = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+    remove(this.#loadingComponent);
     if (resetFilters) {
       this.#currentFilterType = FilterType.EVERYTHING;
     }
@@ -179,14 +201,6 @@ export default class BoardPresenter {
     if (resetSorting) {
       this.#currentSortType = SortType.DAY;
     }
-  }
-
-  #renderNoPoints() {
-    this.#noPoints = new NoPointsView({
-      filter: this.#currentFilterType,
-    });
-
-    render(this.#noPoints, this.#pointsListComponent.element);
   }
 
   #clearPoint = (point) => {

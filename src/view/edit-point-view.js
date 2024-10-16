@@ -1,5 +1,5 @@
 import { capitalize } from './utils/utils.js';
-import { getOffersByType, getDestinationId, humanizePointDate } from './utils/point-utils.js';
+import { getDestinationId, humanizePointDate } from './utils/point-utils.js';
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import flatpickr from 'flatpickr';
@@ -240,7 +240,7 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
     if (Number.isFinite(Number(evt.target.value))) {
       this.updateElement(({
-        basePrice: evt.target.value,
+        basePrice: Number(evt.target.value),
       }));
       return;
     }
@@ -249,11 +249,9 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formTypeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.element.querySelector('.event__label').textContent = evt.target.value;
-
     this.updateElement(({
       type: evt.target.value,
-      offers: getOffersByType(evt.target.value, this.#offers),
+      offers: [],
     }));
   };
 
@@ -265,8 +263,8 @@ export default class EditPointView extends AbstractStatefulView {
     }
 
     let updatedOffers = [];
-    const newOffer = Number(Object.values(evt.target.dataset));
-    const isNewOfferInList = this._state.offers.find((offer) => offer === newOffer) > 0;
+    const newOffer = evt.target.dataset.type;
+    const isNewOfferInList = this._state.offers.find((offer) => offer === newOffer);
 
     if (isNewOfferInList) {
       updatedOffers = this._state.offers.filter((offer) => offer !== newOffer);

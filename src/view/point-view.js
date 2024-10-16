@@ -3,7 +3,7 @@ import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
 
 const getOffersData = (offerType, offersList) => {
-  const offers = offersList.find((offer) => offer.type === offerType).offers;
+  const offers = offersList.filter((offer) => offer.type === offerType);
 
   const renderOffers = (title, price) => `<li class="event__offer">
       <span class="event__offer-title">${title}</span>
@@ -15,7 +15,7 @@ const getOffersData = (offerType, offersList) => {
 };
 
 function createPointTemplate(point, offers, destinations) {
-  const { type, destination, dateFrom, dateTo, basePrice, isFavorite } = point;
+  const { type, destination, dateFrom, dateTo, basePrice, isFavorite, offers: pointOffers } = point;
   let modifiedDestination = '';
 
   if (destination !== null) {
@@ -23,6 +23,7 @@ function createPointTemplate(point, offers, destinations) {
   }
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
+  const offersList = offers.find((offer) => offer.type === type).offers;
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -44,7 +45,7 @@ function createPointTemplate(point, offers, destinations) {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${getOffersData(type, offers)}
+      ${pointOffers.map((pointOffer) => getOffersData(pointOffer, offersList)).join('')}
     </ul>
     <button class="${favoriteClassName}" type="button">
       <span class="visually-hidden">Add to favorite</span>

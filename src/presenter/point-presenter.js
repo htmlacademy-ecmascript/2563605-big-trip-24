@@ -108,7 +108,7 @@ export default class PointPresenter {
   };
 
   #handleFormSaveClick = (point) => {
-    this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.PATCH, point);
+    this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
