@@ -34,4 +34,4 @@ const filter = {
   [FilterType.FUTURE]: (points) => points.filter((point) => isPointFuture(point)),
 };
 
-export { filter };
+export { filter, isPointPast , isPointFuture, isPointPresent };
