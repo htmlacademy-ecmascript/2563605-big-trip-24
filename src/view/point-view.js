@@ -16,8 +16,11 @@ const getOffersData = (offerType, offersList) => {
 
 function createPointTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice, isFavorite } = point;
+  let modifiedDestination = '';
 
-  const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
+  if (destination !== null) {
+    modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
+  }
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
 

@@ -8,9 +8,8 @@ const getFiltersItem = (type, count) => `<div class="trip-filters__filter">
     type="radio"
     name="trip-filter"
     value="${type}"
-    ${type === 'everything' ? 'checked' : ''}
-    ${count === 0 ? 'disabled' : 'checked'} >
-    <label class="trip-filters__filter-label" for="filter-${type}">${capitalize(type)} ${count}</label>
+    ${type === 'everything' ? 'checked' : ''}>
+    <label class="trip-filters__filter-label" data-filter-type="${type}" for="filter-${type}">${capitalize(type)} ${count}</label>
     </div>`;
 
 function createFiltersTemplate(filters) {
@@ -22,13 +21,26 @@ function createFiltersTemplate(filters) {
 
 export default class FilterView extends AbstractView {
   #filters = [];
+  #handleFiltersChange = null;
 
-  constructor({ filters }) {
+  constructor({ filters, onFiltersChange }) {
     super();
     this.#filters = filters;
+    this.#handleFiltersChange = onFiltersChange;
+
+    this.element.addEventListener('click', this.#filtersChangeHandler);
   }
 
   get template() {
     return createFiltersTemplate(this.#filters);
   }
+
+  #filtersChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'LABEL') {
+      return;
+    }
+
+    evt.preventDefault();
+    this.#handleFiltersChange(evt.target.dataset.filterType);
+  };
 }

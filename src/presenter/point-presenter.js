@@ -1,6 +1,7 @@
 import { render, replace, remove } from '../framework/render';
 import PointView from '../view/point-view';
 import EditPointView from '../view/edit-point-view';
+import { UpdateType, UserAction} from '../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -11,23 +12,25 @@ export default class PointPresenter {
   #point = null;
   #destinations = null;
   #offers = null;
-  #pointsListComponent = null;
 
   #pointComponent = null;
   #editPointComponent = null;
 
-  #handlePointsChange = null;
+  #pointsListComponent = null;
+  #handleModelEvent = null;
   #handleModeChange = null;
   #clearPoint = null;
   #resetPointView = null;
+  #handleModelUpdate = null;
   #mode = Mode.DEFAULT;
 
-  constructor({ pointsListComponent, onPointsChange, onModeChange, onPointClear, onEditPointView }) {
+  constructor({ pointsListComponent, onPointsChange, onModeChange, onPointClear, onEditPointView, onModelUpdate }) {
     this.#pointsListComponent = pointsListComponent;
-    this.#handlePointsChange = onPointsChange;
+    this.#handleModelEvent = onPointsChange;
     this.#handleModeChange = onModeChange;
     this.#clearPoint = onPointClear;
     this.#resetPointView = onEditPointView;
+    this.#handleModelUpdate = onModelUpdate;
   }
 
   init(point, offers, destinations) {
@@ -49,12 +52,13 @@ export default class PointPresenter {
     });
 
     this.#editPointComponent = new EditPointView({
-      point,
-      offers,
-      destinations,
+      point: this.#point,
+      offers: this.#offers,
+      destinations: this.#destinations,
       onEditClick: this.#handleFormEditClick,
       onFormSaveClick: this.#handleFormSaveClick,
       onFormDeleteClick: this.#handleFormDeleteClick,
+      isNewPoint: false,
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -100,11 +104,11 @@ export default class PointPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#handleModelEvent(UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
   #handleFormSaveClick = (point) => {
-    this.#handlePointsChange(point);
+    this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.PATCH, point);
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
