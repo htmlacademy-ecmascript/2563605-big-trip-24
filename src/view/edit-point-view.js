@@ -30,14 +30,19 @@ const getPointOfferItem = (pointOffer, pointOfferChecked, offerId) => `<div clas
     <span class="event__offer-price">${pointOffer.price}</span>
   </label>
   </div>`;
-const getFormButtons = (isNewPoint) => {
-  if (isNewPoint) {
-    return `<button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Cancel</button>`;
-  }
-  return `<button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">`;
+const getFormButtons = (isNewPoint, isDisabled, isSaving, isDeleting) => {
+  const getDisabledState = () => isDisabled ? 'disabled' : '';
+
+  const getButtonName = () => {
+    if (!isDeleting) {
+      return isNewPoint ? 'Cancel' : 'Delete';
+    }
+    return !isNewPoint && isDeleting ? 'Deleting...' : 'Delete';
+  };
+
+  return `<button class="event__save-btn  btn  btn--blue" type="submit"${getDisabledState()} >${isSaving ? 'Saveing...' : 'Save'}</button>
+        <button class="event__reset-btn" type="reset" ${getDisabledState()}>${getButtonName()}</button>
+        ${isNewPoint ? '' : `<button class="event__rollup-btn" type="button"  ${getDisabledState()}>`}`;
 };
 
 const getDestinationInfo = (description, pictures) => {
@@ -73,7 +78,7 @@ const getOffersInfo = (allOffers, pointOffers) => {
 };
 
 function createEditPointTemplate(point, offers, destinations, isNewPoint) {
-  const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
+  const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers, isDisabled, isSaving, isDeleting } = point;
   let modifiedDestination = '';
   let description = '';
   let pictures = [];
@@ -97,11 +102,11 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
-        <label class="event__type  event__type-btn" for="event-type-toggle-1">
+        <label class="event__type  event__type-btn" for="event-type-toggle-1" >
           <span class="visually-hidden">Choose event type</span>
           <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
         </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
@@ -113,26 +118,26 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
         <label class="event__label  event__type-output" for="event-destination-1">
           ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${modifiedDestination}" list="destination-list-1" required>
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${modifiedDestination}" list="destination-list-1" required ${isDisabled ? 'disabled' : ''}>
         <datalist id="destination-list-1">
           ${destinations.map((destinationElement) => createDestinationsList(destinationElement.name)).join('') ?? ''}
         </datalist>
       </div>
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizePointDate(dateFrom, DATE_WITH_TIME_FORMAT)}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizePointDate(dateFrom, DATE_WITH_TIME_FORMAT)}" ${isDisabled ? 'disabled' : ''}>
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizePointDate(dateTo, DATE_WITH_TIME_FORMAT)}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizePointDate(dateTo, DATE_WITH_TIME_FORMAT)}" ${isDisabled ? 'disabled' : ''}>
       </div>
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}" required ${isDisabled ? 'disabled' : ''}>
       </div>
-      ${getFormButtons(isNewPoint)}
+      ${getFormButtons(isNewPoint, isDisabled, isSaving, isDeleting)}
         <span class="visually-hidden">Open event</span>
       </button>
     </header>
@@ -209,11 +214,22 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   static parsePointToState(point) {
-    return { ...point };
+    return {
+      ...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false
+    };
   }
 
   static parseStateToPoint(state) {
-    return { ...state };
+    const point = { ...state };
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+
+    return point;
   }
 
   #editClickHandler = (evt) => {
@@ -238,13 +254,15 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formPriceInputHandler = (evt) => {
     evt.preventDefault();
-    if (Number.isFinite(Number(evt.target.value))) {
-      this.updateElement(({
-        basePrice: Number(evt.target.value),
-      }));
+    const targetPrice = Number(evt.target.value);
+
+    if (!Number.isFinite(targetPrice)) {
+      evt.target.value = '';
       return;
     }
-    evt.target.value = '';
+    this.updateElement(({
+      basePrice: targetPrice,
+    }));
   };
 
   #formTypeChangeHandler = (evt) => {
