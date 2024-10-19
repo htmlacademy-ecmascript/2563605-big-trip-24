@@ -10,8 +10,8 @@ const Mode = {
 
 export default class PointPresenter {
   #point = null;
-  #destinations = null;
-  #offers = null;
+  #destinations = [];
+  #offers = [];
 
   #pointComponent = null;
   #editPointComponent = null;
@@ -162,6 +162,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      this.#editPointComponent.reset(this.#point);
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }

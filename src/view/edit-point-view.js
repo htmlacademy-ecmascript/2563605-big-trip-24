@@ -210,8 +210,9 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   get template() {
-    return createEditPointTemplate(this._state, this.#offers, this.#destinations);
+    return createEditPointTemplate(this._state, this.#offers, this.#destinations, this.#isNewPoint);
   }
+  
 
   static parsePointToState(point) {
     return {
