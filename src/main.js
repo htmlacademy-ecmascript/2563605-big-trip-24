@@ -19,6 +19,7 @@ const pointModel = new PointModel({
   pointsContainer: pointsContainer,
 });
 const filtersModel = new FiltersModel();
+
 const addNewPointButton = new AddNewPointButtonView({
   onClick: onNewPointButtonClick,
 });
