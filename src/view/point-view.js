@@ -2,7 +2,7 @@ import { humanizePointDate, getPointDuration } from './utils/point-utils';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
 
-const getOffersData = (offerType, offersList) => {
+const getOffers = (offerType, offersList) => {
   const offers = offersList.filter((offer) => offer.type === offerType);
 
   const renderOffers = (title, price) => `<li class="event__offer">
@@ -17,7 +17,6 @@ const getOffersData = (offerType, offersList) => {
 function createPointTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice, isFavorite, offers: pointOffers } = point;
   let modifiedDestination = '';
-
   if (destination !== null) {
     modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
   }
@@ -45,7 +44,7 @@ function createPointTemplate(point, offers, destinations) {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${pointOffers.map((pointOffer) => getOffersData(pointOffer, offersList)).join('')}
+      ${pointOffers.map((pointOffer) => getOffers(pointOffer, offersList)).join('')}
     </ul>
     <button class="${favoriteClassName}" type="button">
       <span class="visually-hidden">Add to favorite</span>
@@ -62,8 +61,8 @@ function createPointTemplate(point, offers, destinations) {
 
 export default class PointView extends AbstractView {
   #point = null;
-  #offers = null;
-  #destinations = null;
+  #offers = [];
+  #destinations = [];
   #handleEditClick = null;
   #handleFavoriteClick = null;
 

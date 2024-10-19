@@ -29,6 +29,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const ListEmptyText = {
@@ -51,6 +52,8 @@ const BLANK_POINT = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 const URL = {
@@ -59,4 +62,9 @@ const URL = {
   OFFERS: 'offers',
 };
 
-export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType, ListEmptyText, BLANK_POINT, Method, URL };
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
+export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType, ListEmptyText, BLANK_POINT, Method, URL, TimeLimit };

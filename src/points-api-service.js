@@ -3,8 +3,8 @@ import { Method, URL } from './const';
 
 export default class PointsApiService extends ApiService {
   get points() {
-    return this._load({url: URL.POINTS}) // загрузка данных с сервера
-      .then(ApiService.parseResponse); // преобразуем строку к объекту чтобы с ним далее работать
+    return this._load({url: URL.POINTS})
+      .then(ApiService.parseResponse);
   }
 
   get allDestinations() {
@@ -28,6 +28,28 @@ export default class PointsApiService extends ApiService {
     const parsedResponse = await ApiService.parseResponse(response);
 
     return parsedResponse;
+  }
+
+  async addPoint(point) {
+    const response = await this._load({
+      url: URL.POINTS,
+      method: Method.POST,
+      body: JSON.stringify(this.#adaptToServer(point)),
+      headers: new Headers({ 'Content-Type': 'application/json' })
+    });
+
+    const parsedResponse = await ApiService.parseResponse(response);
+
+    return parsedResponse;
+  }
+
+  async deletePoint(point) {
+    const response = await this._load({
+      url: `${URL.POINTS}/${point.id}`,
+      method: Method.DELETE,
+    });
+
+    return response;
   }
 
   #adaptToServer(point) {
