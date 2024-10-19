@@ -170,6 +170,11 @@ export default class EditPointView extends AbstractStatefulView {
     this.#handleFormDelete = onFormDeleteClick;
     this.#isNewPoint = isNewPoint;
 
+    this._restoreHandlers();
+
+  }
+
+  _restoreHandlers() {
     if (!this.#isNewPoint) {
       this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     }
@@ -212,7 +217,6 @@ export default class EditPointView extends AbstractStatefulView {
   get template() {
     return createEditPointTemplate(this._state, this.#offers, this.#destinations, this.#isNewPoint);
   }
-  
 
   static parsePointToState(point) {
     return {

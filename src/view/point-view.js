@@ -17,7 +17,6 @@ const getOffers = (offerType, offersList) => {
 function createPointTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice, isFavorite, offers: pointOffers } = point;
   let modifiedDestination = '';
-
   if (destination !== null) {
     modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
   }
