@@ -7,12 +7,12 @@ export default class PointsApiService extends ApiService {
       .then(ApiService.parseResponse);
   }
 
-  get allDestinations() {
+  get destinations() {
     return this._load({url: URL.DESTINATIONS})
       .then(ApiService.parseResponse);
   }
 
-  get allOffers() {
+  get offers() {
     return this._load({url: URL.OFFERS})
       .then(ApiService.parseResponse);
   }

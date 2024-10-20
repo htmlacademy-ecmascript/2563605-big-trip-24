@@ -50,9 +50,9 @@ export default class PointModel extends Observable {
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
-      this.#destinations = await this.#pointsApiService.allDestinations;
+      this.#destinations = await this.#pointsApiService.destinations;
 
-      this.#offers = await this.#pointsApiService.allOffers;
+      this.#offers = await this.#pointsApiService.offers;
     } catch (err) {
       render(this.#failedToLoadComponent, this.#pointsContainer);
     }

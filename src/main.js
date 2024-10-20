@@ -7,7 +7,7 @@ import FiltersPresenter from './presenter/filters-presenter';
 import AddNewPointButtonView from './view/add-new-point-button-view';
 import PointsApiService from './points-api-service';
 
-const AUTHORIZATION = 'Basic eo0wdfg2563605a';
+const AUTHORIZATION = 'Basic eo0wdfg2563605ad';
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 
 const mainContainer = document.querySelector('.trip-main');
