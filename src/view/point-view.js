@@ -3,7 +3,7 @@ import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
 
 const getOffers = (offerType, offersList) => {
-  const offers = offersList.filter((offer) => offer.type === offerType);
+  const offers = offersList.filter((offer) => offer.id === offerType);
 
   const renderOffers = (title, price) => `<li class="event__offer">
       <span class="event__offer-title">${title}</span>
