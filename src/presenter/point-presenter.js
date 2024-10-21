@@ -1,12 +1,7 @@
 import { render, replace, remove } from '../framework/render';
 import PointView from '../view/point-view';
 import EditPointView from '../view/edit-point-view';
-import { UpdateType, UserAction} from '../const';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDIT: 'EDIT'
-};
+import { UpdateType, UserAction, Mode} from '../const';
 
 export default class PointPresenter {
   #point = null;
@@ -17,18 +12,14 @@ export default class PointPresenter {
   #editPointComponent = null;
 
   #pointsListComponent = null;
-  #handleModelEvent = null;
   #handleModeChange = null;
-  #clearPoint = null;
   #resetPointView = null;
   #handleModelUpdate = null;
   #mode = Mode.DEFAULT;
 
-  constructor({ pointsListComponent, onPointsChange, onModeChange, onPointClear, onEditPointView, onModelUpdate }) {
+  constructor({ pointsListComponent, onModeChange, onEditPointView, onModelUpdate }) {
     this.#pointsListComponent = pointsListComponent;
-    this.#handleModelEvent = onPointsChange;
     this.#handleModeChange = onModeChange;
-    this.#clearPoint = onPointClear;
     this.#resetPointView = onEditPointView;
     this.#handleModelUpdate = onModelUpdate;
   }
@@ -129,7 +120,7 @@ export default class PointPresenter {
     }
 
     const resetFormState = () => {
-      this.#pointComponent.updateElement({
+      this.#editPointComponent.updateElement({
         isDisabled: false,
         isSaving: false,
         isDeleting: false,
@@ -140,17 +131,15 @@ export default class PointPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#handleModelEvent(UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.PATCH, {...this.#point, isFavorite: !this.#point.isFavorite});
   };
 
   #handleFormSaveClick = (point) => {
     this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleFormDeleteClick = (point) => {
-    this.#clearPoint(point);
-    this.#replaceFormToPoint();
+    this.#handleModelUpdate(UserAction.DELETE_POINT, UpdateType.MINOR, point);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
@@ -160,7 +149,7 @@ export default class PointPresenter {
   };
 
   #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape') {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#editPointComponent.reset(this.#point);
       this.#replaceFormToPoint();

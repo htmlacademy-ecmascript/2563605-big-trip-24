@@ -1,20 +1,16 @@
 import Observable from '../framework/observable';
 import { UpdateType } from '../const';
-import FailedToLoadView from '../view/failed-to-load-view';
-import { render } from '../framework/render';
 
 export default class PointModel extends Observable {
   #points = [];
   #destinations = [];
   #offers = [];
   #pointsApiService = null;
-  #failedToLoadComponent = new FailedToLoadView();
-  #pointsContainer = null;
+  #isFailedToLoadPoints = false;
 
-  constructor({ pointsApiService, pointsContainer }) {
+  constructor({ pointsApiService }) {
     super();
     this.#pointsApiService = pointsApiService;
-    this.#pointsContainer = pointsContainer;
   }
 
   get points() {
@@ -27,6 +23,10 @@ export default class PointModel extends Observable {
 
   get offers() {
     return this.#offers;
+  }
+
+  get failedToLoadPoints() {
+    return this.#isFailedToLoadPoints;
   }
 
   #adaptToClient(point) {
@@ -50,11 +50,14 @@ export default class PointModel extends Observable {
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
-      this.#destinations = await this.#pointsApiService.allDestinations;
+      this.#destinations = await this.#pointsApiService.destinations;
 
-      this.#offers = await this.#pointsApiService.allOffers;
+      this.#offers = await this.#pointsApiService.offers;
     } catch (err) {
-      render(this.#failedToLoadComponent, this.#pointsContainer);
+      this.#points = [];
+      this.#offers = [];
+      this.#destinations = [];
+      this.#isFailedToLoadPoints = true;
     }
 
     this._notify(UpdateType.INIT);
@@ -71,7 +74,6 @@ export default class PointModel extends Observable {
       const response = await this.#pointsApiService.updatePoint(update);
       const updatedPoint = this.#adaptToClient(response);
 
-      this._notify(updateType, updatedPoint);
       this.#points = [
         ...this.#points.slice(0, pointIndex),
         updatedPoint,
@@ -97,14 +99,10 @@ export default class PointModel extends Observable {
   }
 
   async deletePoint(updateType, update) {
-    const pointIndex = this.#points.findIndex((point) => point.id === update.id);
-
     try {
       await this.#pointsApiService.deletePoint(update);
-      this.#points = [
-        ...this.#points.slice(0, pointIndex),
-        ...this.#points.slice(pointIndex + 1),
-      ];
+      this.#points = this.#points.filter((point) => point.id !== update.id);
+
       this._notify(updateType);
     } catch (err) {
       throw new Error('Can\'t delete task');
