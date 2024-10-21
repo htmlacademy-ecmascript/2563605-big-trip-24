@@ -6,9 +6,9 @@ const DATE_WITH_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
 const FilterType = {
   EVERYTHING: 'everything',
-  PAST: 'past',
   FUTURE: 'future',
   PRESENT: 'present',
+  PAST: 'past',
 };
 
 const SortType = {
@@ -34,9 +34,9 @@ const UpdateType = {
 
 const ListEmptyText = {
   [FilterType.EVERYTHING]: 'Click New Event to create your first point',
-  [FilterType.PAST]: 'There are no past events now',
   [FilterType.PRESENT]: 'There are no present events now',
   [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PAST]: 'There are no past events now',
 };
 
 const BLANK_POINT = {
@@ -67,4 +67,9 @@ const TimeLimit = {
   UPPER_LIMIT: 1000,
 };
 
-export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType, ListEmptyText, BLANK_POINT, Method, URL, TimeLimit };
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDIT: 'EDIT'
+};
+
+export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType, ListEmptyText, BLANK_POINT, Method, URL, TimeLimit, Mode};
