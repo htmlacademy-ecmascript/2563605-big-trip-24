@@ -289,10 +289,6 @@ export default class EditPointView extends AbstractStatefulView {
   #offersChooseHandler = (evt) => {
     evt.preventDefault();
 
-    // if (evt.target.tagName !== 'INPUT') {
-    //   return;
-    // }
-
     let updatedOffers = [];
     const newOffer = evt.currentTarget.dataset.type;
     const isNewOfferInList = this._state.offers.find((offer) => offer === newOffer);
