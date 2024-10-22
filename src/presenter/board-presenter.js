@@ -6,7 +6,7 @@ import FailedToLoadView from '../view/failed-to-load-view';
 import { RenderPosition, remove, render } from '../framework/render';
 import PointPresenter from './point-presenter';
 import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const';
-import { getWeightForPrice, getWeightForTime } from '../view/utils/point-utils';
+import { getWeightForPrice, getWeigthForDay, getWeightForTime } from '../view/utils/point-utils';
 import { filter } from '../view/utils/filter';
 import NewPointPresenter from './new-point-presenter';
 import LoadingView from '../view/loading-view';
@@ -63,6 +63,8 @@ export default class BoardPresenter {
         return filteredPoints.sort(getWeightForTime);
       case SortType.PRICE:
         return filteredPoints.sort(getWeightForPrice);
+      case SortType.DAY:
+        return filteredPoints.sort(getWeigthForDay);
     }
     return filteredPoints;
   }
@@ -228,7 +230,7 @@ export default class BoardPresenter {
         break;
       // - обновить всю доску (с очисткой фильтров и сортировки)
       case UpdateType.MAJOR:
-        this.#clearPointsList({ resetFilters: true, resetSorting: true });
+        this.#clearPointsList({ resetFilters: true, resetSort: true });
         this.#renderPointsList();
         break;
       case UpdateType.INIT:
